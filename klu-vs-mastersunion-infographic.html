@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>KLU vs Masters' Union · Skilling Benchmark</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16181D; --canvas:#FBFAF7; --paper:#FFFFFF;
+    --crimson:#9E1B32; --crimson-deep:#7A1426;
+    --navy:#1C2B4A; --navy-2:#2A3F69; --amber:#B07A00;
+    --muted:#6C7079; --line:#E5E2DA; --line-strong:#D4D0C6;
+    --good:#1F7A52; --free:#1F7A52;
+    --shadow:0 1px 2px rgba(20,22,28,.04),0 9px 30px rgba(20,22,28,.06);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--canvas);color:var(--ink);font-family:"Inter",system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+  h1,h2,h3,h4{font-family:"Fraunces",Georgia,serif;font-weight:600;line-height:1.1;letter-spacing:-.01em;margin:0}
+  a{color:var(--crimson);text-decoration:none} a:hover{text-decoration:underline}
+  .mono{font-family:"IBM Plex Mono",monospace}
+
+  header.bar{position:sticky;top:0;z-index:60;background:rgba(251,250,247,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .bar .wrap{display:flex;align-items:center;justify-content:space-between;height:58px;gap:14px}
+  .brand{display:flex;align-items:center;gap:11px;flex:none}
+  .crest{width:32px;height:32px;border-radius:7px;background:var(--crimson);color:#fff;display:grid;place-items:center;font-family:"Fraunces",serif;font-weight:700;font-size:17px}
+  .brand b{font-family:"Fraunces",serif;font-weight:600;font-size:15px}
+  .brand span{display:block;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+  nav.sn{display:flex;gap:16px;overflow-x:auto}
+  nav.sn a{font-size:11.5px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;font-weight:500;white-space:nowrap}
+  nav.sn a:hover{color:var(--ink);text-decoration:none}
+  @media(max-width:920px){nav.sn{display:none}}
+
+  .hero{padding:46px 0 8px}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--crimson);font-weight:500}
+  .hero h1{font-size:clamp(30px,4.6vw,52px);margin:13px 0 0;max-width:20ch}
+  .hero h1 em{font-style:italic;color:var(--crimson)}
+  .hero p.lead{max-width:70ch;margin:16px 0 0;font-size:16.5px;color:#3a3d44}
+
+  section.s{padding:46px 0;border-top:1px solid var(--line)}
+  section.s.first{border-top:none;padding-top:30px}
+  .kick{display:flex;align-items:baseline;gap:13px;margin-bottom:9px}
+  .kick .n{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--crimson);font-weight:600}
+  .kick .l{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  section.s h2{font-size:clamp(25px,3.4vw,36px);max-width:24ch;margin-bottom:11px}
+  section.s .intro{max-width:68ch;color:#3a3d44;font-size:15.5px;margin-bottom:6px}
+
+  /* ============ INFOGRAPHIC ============ */
+  .versus{display:grid;grid-template-columns:1fr 64px 1fr;gap:0;align-items:stretch;margin-top:22px}
+  @media(max-width:760px){.versus{grid-template-columns:1fr;gap:12px}}
+  .vcard{border-radius:14px;padding:20px 22px;color:#fff;position:relative;box-shadow:var(--shadow)}
+  .vcard.klu{background:linear-gradient(160deg,var(--navy),var(--navy-2));border-top-right-radius:0;border-bottom-right-radius:0}
+  .vcard.mu{background:linear-gradient(160deg,var(--crimson),var(--crimson-deep));border-top-left-radius:0;border-bottom-left-radius:0}
+  @media(max-width:760px){.vcard{border-radius:14px!important}}
+  .vcard .vtag{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;opacity:.85;font-weight:600}
+  .vcard h3{color:#fff;font-size:21px;margin:7px 0 12px}
+  .vcard ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px}
+  .vcard li{font-size:13px;opacity:.95;padding-left:18px;position:relative}
+  .vcard li:before{content:"›";position:absolute;left:2px;top:-1px;opacity:.7;font-weight:700}
+  .vs{display:grid;place-items:center}
+  .vs span{width:50px;height:50px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-family:"Fraunces",serif;font-weight:700;font-size:16px;box-shadow:0 4px 14px rgba(0,0,0,.18);z-index:2}
+  @media(max-width:760px){.vs span{width:42px;height:42px;font-size:14px}}
+
+  .tally{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;margin:22px 0 6px;background:var(--paper);border:1px solid var(--line-strong);border-radius:14px;padding:18px 24px;box-shadow:var(--shadow)}
+  .tally .side{text-align:center}
+  .tally .num{font-family:"Fraunces",serif;font-size:46px;font-weight:700;line-height:1;display:block}
+  .tally .side.klu .num{color:var(--navy)} .tally .side.mu .num{color:var(--crimson)}
+  .tally .lab{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-top:5px;display:block}
+  .tally .mid{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center;border-left:1px solid var(--line);border-right:1px solid var(--line);padding:0 20px}
+  .tally .mid b{display:block;font-family:"Fraunces",serif;font-size:20px;color:var(--ink);font-weight:600}
+
+  .board{margin-top:14px;border:1px solid var(--line-strong);border-radius:14px;overflow:hidden;background:var(--paper);box-shadow:var(--shadow)}
+  .board .bhead{display:grid;grid-template-columns:1fr 1.1fr 1fr;background:var(--ink)}
+  .board .bhead div{padding:11px 16px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#fff;font-weight:600}
+  .board .bhead .hk{color:#AFC0DE} .board .bhead .hm{color:#E9B7C0;text-align:right} .board .bhead .hl{text-align:center;color:#cfcdc6}
+  .brow{display:grid;grid-template-columns:1fr 1.1fr 1fr;border-top:1px solid var(--line);align-items:stretch}
+  .bk,.bm{padding:13px 16px;font-size:13px;display:flex;flex-direction:column;justify-content:center}
+  .bm{text-align:right;align-items:flex-end}
+  .blbl{padding:13px 12px;text-align:center;font-weight:600;font-size:12.5px;color:var(--ink);background:#FBFAF7;display:flex;align-items:center;justify-content:center;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+  .bk small,.bm small{color:var(--muted);font-weight:400;font-size:11px;margin-top:2px}
+  .bk.win{background:rgba(28,43,74,.07)} .bm.win{background:rgba(158,27,50,.06)}
+  .bk.win .v,.bm.win .v{font-weight:700}
+  .bk .v{color:var(--navy)} .bm .v{color:var(--crimson)}
+  .wtick{font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:1px 6px;border-radius:5px;display:inline-block;margin-bottom:4px}
+  .bk .wtick{background:var(--navy);color:#fff;align-self:flex-start} .bm .wtick{background:var(--crimson);color:#fff;align-self:flex-end}
+  .tieK,.tieM{font-size:13px}
+  @media(max-width:760px){
+    .board .bhead{display:none}
+    .brow{grid-template-columns:1fr 1fr;position:relative;padding-top:30px}
+    .blbl{grid-column:1 / -1;position:absolute;top:0;left:0;right:0;justify-content:flex-start;padding:7px 14px;font-size:11px;background:#F2F0EA;border:none;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-family:"IBM Plex Mono",monospace}
+    .bm{text-align:right}
+  }
+
+  .contrast{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+  @media(max-width:760px){.contrast{grid-template-columns:repeat(2,1fr)}}
+  .ct{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow)}
+  .ct .cl{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .ct .pair{display:flex;align-items:baseline;justify-content:space-between;margin-top:8px;gap:8px}
+  .ct .kv{font-family:"Fraunces",serif;font-size:21px;font-weight:700;color:var(--navy);line-height:1}
+  .ct .mv{font-family:"Fraunces",serif;font-size:21px;font-weight:700;color:var(--crimson);line-height:1;text-align:right}
+  .ct .vs2{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--muted);text-transform:uppercase}
+  .ct .who{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:5px;font-family:"IBM Plex Mono",monospace}
+
+  /* verdict */
+  .concl{background:linear-gradient(160deg,var(--navy),var(--navy-2));color:#EAEDF4;border-radius:16px;padding:30px 30px;margin-top:22px;position:relative;overflow:hidden}
+  .concl .tl{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#9FB0CE;margin-bottom:7px}
+  .concl h3{color:#fff;font-size:clamp(22px,3vw,30px);margin-bottom:12px;max-width:24ch}
+  .concl h3 em{font-style:italic;color:#F3C0CA}
+  .concl .vg{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+  @media(max-width:680px){.concl .vg{grid-template-columns:1fr}}
+  .concl .vbox{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);border-radius:11px;padding:15px 17px}
+  .concl .vbox .h{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;margin-bottom:6px}
+  .concl .vbox.win .h{color:#9FE3C0} .concl .vbox.gap .h{color:#F3C0CA}
+  .concl .vbox p{color:#DDE3EE;font-size:13px;margin:0}
+  .concl .move{margin-top:18px;font-size:14.5px;color:#EAEDF4;max-width:80ch}
+  .concl .move b{color:#fff}
+
+  /* facet comparison table */
+  .tablewrap{margin-top:20px;border:1px solid var(--line-strong);border-radius:13px;overflow:hidden;box-shadow:var(--shadow);background:var(--paper)}
+  .scroll{overflow-x:auto}
+  table.cmp{border-collapse:collapse;width:100%;min-width:720px;font-size:13.5px}
+  table.cmp thead th{text-align:left;padding:13px 15px;background:#F2F0EA;border-bottom:1px solid var(--line-strong);font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;vertical-align:bottom}
+  table.cmp thead th:not(:first-child){border-left:1px solid var(--line)}
+  table.cmp thead th .s2{display:block;font-family:Inter;text-transform:none;letter-spacing:0;font-weight:400;color:var(--muted);font-size:11px;margin-top:2px}
+  table.cmp td{padding:12px 15px;border-bottom:1px solid var(--line);border-left:1px solid var(--line);vertical-align:top}
+  table.cmp td:first-child{border-left:none}
+  table.cmp tr:last-child td{border-bottom:none}
+  td.d{font-weight:600;background:#FBFAF7;width:20%;min-width:130px}
+  td.klu{background:rgba(28,43,74,.022)} td.mu{background:rgba(158,27,50,.02)}
+  .tag2{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;padding:1px 6px;border-radius:5px;margin-bottom:5px}
+  .t-lead{background:#E3F0E9;color:var(--good)} .t-gap{background:#F6E4E8;color:var(--crimson-deep)} .t-even{background:#E7EEF7;color:var(--navy)}
+
+  /* tabs */
+  .tabs{display:inline-flex;background:#EFEDE6;border:1px solid var(--line-strong);border-radius:10px;padding:4px;margin:22px 0 10px;gap:4px}
+  .tabs button{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;border:none;background:transparent;color:var(--muted);padding:7px 16px;border-radius:7px;cursor:pointer}
+  .tabs button.on{background:var(--paper);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+  /* track grid */
+  .tracks{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:14px}
+  @media(max-width:880px){.tracks{grid-template-columns:1fr}}
+  .track{background:var(--paper);border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow);overflow:hidden}
+  .track .th{padding:15px 17px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start;gap:12px;background:linear-gradient(180deg,#FCFBF8,#FBFAF7)}
+  .track .th h3{font-size:17.5px}
+  .track .th .meta{font-size:11px;color:var(--muted);margin-top:4px}
+  .track .th .ctc{text-align:right;flex:none}
+  .track .th .ctc b{font-family:"Fraunces",serif;font-size:20px;color:var(--crimson);font-weight:600;display:block}
+  .track .th .ctc span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .roles{padding:6px 17px 4px}
+  .roles table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .roles td{padding:6px 0;border-bottom:1px solid #F1EFE9;vertical-align:top}
+  .roles tr:last-child td{border-bottom:none}
+  .roles .rn{font-weight:600;width:48%}
+  .roles .rn small{display:block;color:var(--muted);font-weight:400;font-size:10.5px;margin-top:1px}
+  .roles .rp{color:var(--navy);font-weight:600;white-space:nowrap;text-align:right}
+  .roles .rl{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;text-align:right;width:64px}
+  .certs{padding:8px 17px 16px;background:#FCFBF8;border-top:1px solid var(--line)}
+  .certs .ch{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:6px 0 8px}
+  .cert{border-left:2px solid var(--line-strong);padding:0 0 0 11px;margin:0 0 12px}
+  .cert:last-child{margin-bottom:2px}
+  .cert .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+  .cert .nm{font-weight:600;font-size:13.5px}
+  .cert .cost{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;padding:1px 7px;border-radius:5px;white-space:nowrap;flex:none}
+  .cert .cost.free{background:#E3F0E9;color:var(--free)} .cert .cost.paid{background:#FBF0D6;color:var(--amber)}
+  .cert .rr{font-size:11.5px;color:var(--navy);margin-top:3px}
+  .cert .rr b{color:var(--navy)}
+  .cert .cap{font-size:11px;color:#52555c;margin-top:3px}
+  .cert .how{font-size:10.5px;color:var(--muted);margin-top:2px}
+
+  /* career grid */
+  .careers{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:14px}
+  @media(max-width:880px){.careers{grid-template-columns:1fr}}
+  .cr{background:var(--paper);border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow);padding:17px 18px;position:relative}
+  .cr .rank{position:absolute;top:15px;right:17px;font-family:"Fraunces",serif;font-size:30px;color:#EBE7DD;font-weight:700;line-height:1}
+  .cr h3{font-size:16.5px;max-width:80%}
+  .cr .elig{font-size:11px;color:var(--muted);margin-top:3px}
+  .cr .ctc{font-family:"Fraunces",serif;font-size:19px;color:var(--crimson);font-weight:600;margin:9px 0 11px}
+  .cr .lab{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-top:10px;margin-bottom:5px}
+  .stack{display:flex;flex-wrap:wrap;gap:5px}
+  .stack .chip{background:#EEF1F6;color:var(--navy);font-size:11px;font-weight:500;padding:2px 8px;border-radius:6px}
+  .cr p{margin:0;font-size:12px;color:#3a3d44}
+  .cr p.logic{font-style:italic;color:#52555c;margin-top:8px}
+  .cr p.day{font-size:11px;color:var(--muted);margin-top:8px;border-top:1px dashed var(--line);padding-top:8px}
+
+  footer{padding:32px 0 70px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line)}
+  footer .wrap{display:grid;gap:11px}
+  footer b{color:var(--ink)}
+  footer .src{font-family:"IBM Plex Mono",monospace;font-size:11px;line-height:1.9;word-break:break-word}
+
+  @media print{header.bar,nav.sn,.tabs{display:none}.track,.cr,.tablewrap,.concl,.board,.tally,.versus .vcard,.ct{box-shadow:none}.tracks,.careers{grid-template-columns:1fr 1fr}[data-pane]{display:block!important}[data-cpane]{display:block!important}}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <div class="brand"><div class="crest">KL</div><div><b>KL University · KLSkill</b><span>Skilling Benchmark</span></div></div>
+    <nav class="sn">
+      <a href="#vs">vs Masters' Union</a>
+      <a href="#verdict">Verdict</a>
+      <a href="#detail">Detail table</a>
+      <a href="#mba">MBA tracks</a>
+      <a href="#bba">BBA tracks</a>
+      <a href="#careers">Career paths</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="eyebrow">KL University · Skill Development Division · MBA &amp; BBA · 2026</div>
+    <h1>KLU vs Masters&rsquo; Union, <em>at a glance.</em></h1>
+    <p class="lead">Who wins on skilling and certifications &mdash; and where each programme actually pulls ahead. The scoreboard first; the full specialization tracks, certifications and career pathways below.</p>
+  </div>
+</div>
+
+<!-- ============ INFOGRAPHIC: VS ============ -->
+<section class="s first" id="vs">
+  <div class="wrap">
+    <div class="kick"><span class="n">01</span><span class="l">Head to head</span></div>
+    <h2>Two different bets on how to build a career.</h2>
+
+    <div class="versus">
+      <div class="vcard klu">
+        <div class="vtag">KLU · KLSkill + Y26</div>
+        <h3>A structured skilling system</h3>
+        <ul>
+          <li>18 specialization tracks (10 MBA + 8 BBA)</li>
+          <li>30+ industry certifications, ₹0&ndash;1,500</li>
+          <li>Every cert mapped to roles, pay &amp; a capstone</li>
+          <li>OBE academics + 420-hr placement engine</li>
+        </ul>
+      </div>
+      <div class="vs"><span>VS</span></div>
+      <div class="vcard mu">
+        <div class="vtag">Masters&rsquo; Union · PGP TBM</div>
+        <h3>An experiential venture engine</h3>
+        <ul>
+          <li>₹5 Cr student-run investment fund</li>
+          <li>Live CXO projects + startup to Demo Day</li>
+          <li>CXOs / MDs teach the courses</li>
+          <li>₹29.38L cost · ₹33.4L average outcome</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tally">
+      <div class="side klu"><span class="num">4</span><span class="lab">KLU leads</span></div>
+      <div class="mid"><b>7</b>dimensions scored</div>
+      <div class="side mu"><span class="num">3</span><span class="lab">MU leads</span></div>
+    </div>
+
+    <div class="board">
+      <div class="bhead"><div class="hk">KLU</div><div class="hl">Dimension</div><div class="hm">Masters&rsquo; Union</div></div>
+
+      <div class="brow">
+        <div class="bk win"><span class="wtick">Wins</span><span class="v">30+ certifications</span><small>Stackable, role-mapped ladder</small></div>
+        <div class="blbl">Certifications offered</div>
+        <div class="bm"><span class="v">None in the PGP</span><small>Venture evidence instead</small></div>
+      </div>
+
+      <div class="brow">
+        <div class="bk win"><span class="wtick">Wins</span><span class="v">₹0&ndash;1,500</span><small>Most certs free</small></div>
+        <div class="blbl">Cost to certify</div>
+        <div class="bm"><span class="v">₹29.38L</span><small>Programme fee; immersions extra</small></div>
+      </div>
+
+      <div class="brow">
+        <div class="bk win"><span class="wtick">Wins</span><span class="v">Per-credential</span><small>Roles, openings, pay band each</small></div>
+        <div class="blbl">Job &amp; pay mapping</div>
+        <div class="bm"><span class="v">Programme-level</span><small>Avg CTC only</small></div>
+      </div>
+
+      <div class="brow">
+        <div class="bk win"><span class="wtick">Wins</span><span class="v">Full OBE</span><small>PEO/PO/PSO/CO · NBA-ready</small></div>
+        <div class="blbl">Academic rigour</div>
+        <div class="bm"><span class="v">Z-curve credits</span><small>Lighter accreditation scaffolding</small></div>
+      </div>
+
+      <div class="brow">
+        <div class="bk"><span class="v">Capstones</span><small>Simulated deliverables</small></div>
+        <div class="blbl">Experiential proof</div>
+        <div class="bm win"><span class="wtick">Wins</span><span class="v">₹5 Cr fund + ventures</span><small>Demo Day to 100+ VCs</small></div>
+      </div>
+
+      <div class="brow">
+        <div class="bk"><span class="v">Guest lectures</span><small>Self-paced external certs</small></div>
+        <div class="blbl">Faculty model</div>
+        <div class="bm win"><span class="wtick">Wins</span><span class="v">CXOs teach courses</span><small>Bain · BCG · McKinsey MDs</small></div>
+      </div>
+
+      <div class="brow">
+        <div class="bk"><span class="v">₹5.2L avg</span><small>Class of 2025, low cost</small></div>
+        <div class="blbl">Outcomes &amp; brand</div>
+        <div class="bm win"><span class="wtick">Wins</span><span class="v">₹33.4L avg</span><small>Highest ₹1.28 Cr · 145+ recruiters</small></div>
+      </div>
+    </div>
+
+    <div class="contrast">
+      <div class="ct"><div class="cl">Certifications</div><div class="pair"><span class="kv">30+</span><span class="vs2">vs</span><span class="mv">0</span></div><div class="who"><span>KLU</span><span>MU in-PGP</span></div></div>
+      <div class="ct"><div class="cl">Cost to certify</div><div class="pair"><span class="kv">~Free</span><span class="vs2">vs</span><span class="mv">₹29L</span></div><div class="who"><span>KLU</span><span>MU programme</span></div></div>
+      <div class="ct"><div class="cl">Tracks &amp; paths</div><div class="pair"><span class="kv">18+16</span><span class="vs2">vs</span><span class="mv">87 elec.</span></div><div class="who"><span>KLU</span><span>MU</span></div></div>
+      <div class="ct"><div class="cl">Avg outcome</div><div class="pair"><span class="kv">₹5.2L</span><span class="vs2">vs</span><span class="mv">₹33.4L</span></div><div class="who"><span>KLU</span><span>MU</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VERDICT ============ -->
+<section class="s" id="verdict">
+  <div class="wrap">
+    <div class="kick"><span class="n">02</span><span class="l">The verdict</span></div>
+    <h2>What it all means.</h2>
+
+    <div class="concl">
+      <div class="tl">Bottom line</div>
+      <h3>KLU has the better <em>skilling system</em>; Masters&rsquo; Union has the better <em>proof</em>.</h3>
+      <div class="vg">
+        <div class="vbox win">
+          <div class="h">✓ Where KLU wins</div>
+          <p>A structured, almost-free, job-mapped certification ladder across 18 tracks and 16 roles, on top of outcome-mapped academics and a 420-hour placement engine. Masters&rsquo; Union runs no certification programme at all &mdash; this is a genuine KLU advantage to publicise.</p>
+        </div>
+        <div class="vbox gap">
+          <div class="h">△ Where KLU trails</div>
+          <p>The capstones are simulations and industry exposure is mostly guest lectures. Masters&rsquo; Union converts learning into a ₹33L signal through a ₹5 Cr fund, live CXO projects, a build-to-Demo-Day venture ladder, founder stipends, and CXOs who teach.</p>
+        </div>
+      </div>
+      <p class="move"><b>The move:</b> keep the certification lead and bolt a real experience layer onto it &mdash; turn three or four capstones into live GCC-corridor projects, add a graded venture track, stand up a small student investment pool, and bring practitioners in to teach and sign off the capstones. KLU doesn&rsquo;t need MU&rsquo;s price tag; it needs MU&rsquo;s proof layer on a skilling system it already does better.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DETAIL TABLE ============ -->
+<section class="s" id="detail">
+  <div class="wrap">
+    <div class="kick"><span class="n">03</span><span class="l">The detail behind the score</span></div>
+    <h2>Skilling &amp; certification, facet by facet.</h2>
+    <p class="intro">The same comparison in full sentences &mdash; for the record.</p>
+    <div class="tablewrap"><div class="scroll">
+      <table class="cmp">
+        <thead><tr>
+          <th>Facet</th>
+          <th>KLU <span class="s2">KLSkill · Pathways + Y26</span></th>
+          <th>Masters&rsquo; Union <span class="s2">PGP TBM</span></th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="d">Certification model</td><td class="klu"><span class="tag2 t-lead">KLU leads</span><p>Stackable, specialization- and role-mapped ladder; one credential per trimester (Y26) + a 30-cert KLSkill catalogue.</p></td><td class="mu">No third-party certification programme inside the PGP.</td></tr>
+          <tr><td class="d">Coverage</td><td class="klu">10 MBA + 8 BBA tracks; 16 career stacks; Google, NPTEL, Bloomberg, HubSpot, Salesforce, Meta, Microsoft, IBM, ISC2, CFI, BCG, SHRM, Six Sigma, PL-300.</td><td class="mu">PGP certificate + immersion certificates; separate optional Bloomberg programme.</td></tr>
+          <tr><td class="d">Cost to student</td><td class="klu"><span class="tag2 t-lead">KLU leads</span><p>Almost all free or ₹1,100&ndash;1,500.</p></td><td class="mu">₹29.38L programme; immersions extra ₹2.5&ndash;6L.</td></tr>
+          <tr><td class="d">Job &amp; pay mapping</td><td class="klu"><span class="tag2 t-lead">KLU leads</span><p>Every cert tied to named roles, India openings, top recruiters and a package band.</p></td><td class="mu">Outcomes shown at programme level (avg ₹33.4L), not per credential.</td></tr>
+          <tr><td class="d">Proof of skill</td><td class="klu">A capstone deliverable per certification.</td><td class="mu"><span class="tag2 t-even">Even</span><p>Live projects, ventures and a running startup as proof.</p></td></tr>
+          <tr><td class="d">Experiential depth</td><td class="klu">Capstones + internships; ventures not a graded core.</td><td class="mu"><span class="tag2 t-gap">KLU gap</span><p>₹5 Cr fund, live CXO projects, Dropshipping/VIP/Creator challenges, 100+ VC Demo Day, Founders&rsquo; Fellowship.</p></td></tr>
+          <tr><td class="d">Faculty</td><td class="klu">Academic faculty + guest lectures; certs self-paced external.</td><td class="mu"><span class="tag2 t-gap">KLU gap</span><p>Sitting CXOs / MDs from Bain, BCG, McKinsey teach courses.</p></td></tr>
+        </tbody>
+      </table>
+    </div></div>
+  </div>
+</section>
+
+<!-- ============ MBA/BBA TRACKS ============ -->
+<section class="s" id="mba">
+  <div class="wrap">
+    <div class="kick"><span class="n">04</span><span class="l">Specialization-wise certifications</span></div>
+    <h2>Choose a level, then a track.</h2>
+    <p class="intro">Each track lists its real job roles, 2026 India packages, openings and top recruiters, then the optional certifications (student choice, not mandatory) mapped to roles, cost, expected package and a capstone.</p>
+    <div class="tabs" id="specTabs">
+      <button class="on" data-tab="mba">MBA · 10 tracks · target ₹35&ndash;50L</button>
+      <button data-tab="bba">BBA · 8 tracks · target ₹12&ndash;18L</button>
+    </div>
+    <div id="mbaTracks" data-pane="mba"><div class="tracks" id="mbaGrid"></div></div>
+    <div id="bbaTracks" data-pane="bba" style="display:none"><div class="tracks" id="bbaGrid"></div></div>
+  </div>
+</section>
+<span id="bba"></span>
+
+<section class="s" id="careers">
+  <div class="wrap">
+    <div class="kick"><span class="n">05</span><span class="l">Career role pathways</span></div>
+    <h2>Target role &rarr; certification stack &rarr; portfolio proof.</h2>
+    <p class="intro">Pick a destination role and follow the stacked certifications, the portfolio that proves it, the employers who hire for it, and a 90-day plan.</p>
+    <div class="tabs" id="careerTabs">
+      <button class="on" data-ctab="mbac">MBA · 9 paths · ₹12&ndash;35L</button>
+      <button data-ctab="bbac">BBA · 7 paths · ₹6&ndash;15L</button>
+    </div>
+    <div id="mbaCareers" data-cpane="mbac"><div class="careers" id="mbaCareerGrid"></div></div>
+    <div id="bbaCareers" data-cpane="bbac" style="display:none"><div class="careers" id="bbaCareerGrid"></div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><b>KL University · KLSkill · Skilling Benchmark vs Masters&rsquo; Union.</b> Internal aid for the Skill Development Division &amp; Board of Studies, KLEF.</div>
+    <div><b>Caveats.</b> KLU specialization, certification and career-path data is from the KLSkill / Pathways material (2026); package, openings and cost figures are KLU projections &mdash; re-verify each cycle. Masters&rsquo; Union figures are from its public pages (Jun 2026) and change between cohorts. Certifications are optional; a certificate alone does not guarantee a role &mdash; portfolio and interview performance matter.</div>
+    <div class="src">A · y26mba.klef.in &nbsp;&nbsp; B · mbabba-refine-u5ib.vercel.app (KLSkill) &nbsp;&nbsp; C · mastersunion.org/pgp-technology-and-business-management</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  function free(c){return /free/i.test(c);}
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+  // ---------- DATA ----------
+  var MBA = [
+    {n:"Business Analytics & BI",op:"25K+",ctc:"₹28L",
+     roles:[["Business Analyst","₹10–18L","Entry","8K+","Deloitte · TCS · Infosys"],["BI Developer","₹9–16L","Mid","5K+","Cognizant · Wipro · IBM"],["Data Analyst","₹8–14L","Senior","9K+","Amazon · Flipkart · Swiggy"],["Analytics Manager","₹18–28L","Lead","3K+","KPMG · Accenture · Google"]],
+     certs:[
+      {nm:"Google Data Analytics Certificate",cost:"Free",rr:"Data Analyst · BI Analyst",pkg:"₹10–18L",cap:"Cyclistic bike-share 6-case analysis in R/Tableau on Kaggle",how:"6 courses · ~40 hrs · Coursera audit"},
+      {nm:"NPTEL Business Analytics",cost:"₹1,100",rr:"Business Analyst · Analytics Manager",pkg:"₹12–20L",cap:"Retail demand forecasting model (regression + trend report)",how:"12-week IIT-led · proctored exam"},
+      {nm:"Bloomberg Finance Fundamentals",cost:"Free",rr:"Business Analyst · Analytics Manager",pkg:"₹12–20L",cap:"Bloomberg data analysis + BI insights report",how:"~6 hrs · KL Bloomberg Terminal · 3 modules"}]},
+    {n:"AI & Business Automation",op:"18K+",ctc:"₹32L",
+     roles:[["AI Strategy Consultant","₹14–22L","Entry","4K+","McKinsey · BCG · Deloitte"],["Automation Analyst","₹10–16L","Mid","6K+","UiPath · Infosys · TCS"],["ML Business Analyst","₹12–20L","Senior","5K+","Microsoft · IBM · Oracle"],["AI Product Manager","₹18–30L","Lead","3K+","Google · Amazon · Flipkart"]],
+     certs:[
+      {nm:"IBM AI Fundamentals (Coursera)",cost:"Free",rr:"AI Strategy Consultant · ML Business Analyst",pkg:"₹12–22L",cap:"Sentiment analysis app built with IBM Watson NLP APIs",how:"5 IBM badges · ~30 hrs · Coursera audit"},
+      {nm:"NPTEL AI for Managers",cost:"₹1,100",rr:"AI Product Manager · Automation Analyst",pkg:"₹14–22L",cap:"AI adoption roadmap + ROI deck for an industry vertical",how:"8-week IIT · proctored exam"}]},
+    {n:"Digital Marketing & Growth",op:"30K+",ctc:"₹25L",
+     roles:[["Digital Marketing Manager","₹8–16L","Entry","10K+","Dentsu · Publicis · WPP"],["Performance Marketer","₹9–15L","Mid","8K+","Zomato · Swiggy · Nykaa"],["Growth Hacker","₹10–18L","Senior","5K+","CRED · Meesho · OYO"],["CMO Track","₹22–35L+","Lead","7K+","HUL · P&G · Marico"]],
+     certs:[
+      {nm:"Google Digital Marketing & E-commerce",cost:"Free",rr:"Digital Marketing Manager · Performance Marketer",pkg:"₹8–16L",cap:"End-to-end Google Ads + SEO audit campaign",how:"7 courses · ~180 hrs · free"},
+      {nm:"HubSpot Inbound Marketing",cost:"Free",rr:"Growth Hacker · CMO Track",pkg:"₹10–18L",cap:"Inbound campaign blueprint: persona + content map + nurture",how:"9 lessons · ~4 hrs · free exam"}]},
+    {n:"Sales, CRM & Revenue Operations",op:"40K+",ctc:"₹22L",
+     roles:[["Sales Manager","₹10–18L","Entry","15K+","Salesforce · HubSpot · Zoho"],["CRM Analyst","₹8–14L","Mid","8K+","TCS · HCL · Infosys"],["Revenue Ops Lead","₹14–22L","Senior","4K+","Freshworks · Chargebee · Razorpay"],["Key Account Manager","₹12–20L","Lead","13K+","HDFC · ICICI · Axis Bank"]],
+     certs:[
+      {nm:"Salesforce Trailhead (CRM Basics)",cost:"Free",rr:"CRM Analyst · Revenue Ops Lead",pkg:"₹8–14L",cap:"Build a custom CRM pipeline in Trailhead Playground",how:"Admin Beginner path · earn Ranger badge"},
+      {nm:"HubSpot Sales Software Cert",cost:"Free",rr:"Sales Manager · Key Account Manager",pkg:"₹10–18L",cap:"Sales pipeline + deal-stage automation in HubSpot",how:"5 lessons · ~2 hrs · free exam"}]},
+    {n:"Finance, FinTech & FP&A",op:"22K+",ctc:"₹35L",
+     roles:[["Financial Analyst","₹8–16L","Entry","8K+","KPMG · Deloitte · EY"],["FP&A Manager","₹14–24L","Mid","4K+","Goldman Sachs · JP Morgan · Citi"],["FinTech Product Analyst","₹12–20L","Senior","5K+","Razorpay · Paytm · PhonePe"],["CFO Track","₹25–40L+","Lead","5K+","HDFC Bank · Infosys · Reliance"]],
+     certs:[
+      {nm:"NPTEL Financial Management",cost:"₹1,100",rr:"Financial Analyst · FP&A Manager",pkg:"₹8–16L",cap:"3-year P&L + balance-sheet projection for a simulated firm",how:"12-week IIT · proctored exam"},
+      {nm:"CFI Financial Modeling Intro",cost:"Free",rr:"FinTech Product Analyst · CFO Track",pkg:"₹12–20L",cap:"3-statement Excel model with DCF valuation",how:"3 modules · ~8 hrs · free"},
+      {nm:"Bloomberg Market Concepts (BMC)",cost:"Free",rr:"Financial Analyst · FP&A Manager",pkg:"₹10–20L",cap:"Bloomberg Terminal simulation across 4 modules",how:"~8 hrs · KL Terminal · BMC badge"}]},
+    {n:"HR, People Analytics & Talent",op:"15K+",ctc:"₹28L",
+     roles:[["HR Business Partner","₹8–14L","Entry","5K+","TCS · Wipro · Infosys"],["People Analytics Lead","₹12–20L","Mid","3K+","Accenture · Deloitte · IBM"],["Talent Acquisition Manager","₹10–16L","Senior","4K+","HCL · Capgemini · Cognizant"],["CHRO Track","₹22–35L+","Lead","3K+","Mahindra · ITC · Bajaj"]],
+     certs:[
+      {nm:"NPTEL Human Resource Management",cost:"₹1,100",rr:"HR Business Partner · People Analytics Lead",pkg:"₹8–14L",cap:"HR policy design + people-analytics dashboard",how:"8-week IIT · proctored exam"},
+      {nm:"SHRM Essentials of HR (Free Trial)",cost:"Free",rr:"Talent Acquisition Manager · CHRO Track",pkg:"₹10–16L",cap:"HR audit + talent-acquisition plan for a 200-person firm",how:"5 modules · online"}]},
+    {n:"Operations, Supply Chain & ERP",op:"20K+",ctc:"₹30L",
+     roles:[["Operations Manager","₹10–18L","Entry","7K+","Amazon · Flipkart · Delhivery"],["Supply Chain Analyst","₹8–14L","Mid","6K+","Maersk · DHL · Reliance"],["ERP Consultant","₹9–16L","Senior","4K+","SAP · Oracle · Infosys"],["COO Track","₹20–35L+","Lead","3K+","Tata · L&T · Mahindra"]],
+     certs:[
+      {nm:"NPTEL Supply Chain Management",cost:"₹1,100",rr:"Supply Chain Analyst · Operations Manager",pkg:"₹8–14L",cap:"End-to-end supply-chain map with inventory optimisation",how:"12-week IIT · proctored exam"},
+      {nm:"Google Project Management Cert",cost:"Free",rr:"ERP Consultant · COO Track",pkg:"₹9–16L",cap:"Project charter + Agile sprint + stakeholder risk register",how:"6 courses · ~180 hrs · free"}]},
+    {n:"Project, Product & Agile",op:"18K+",ctc:"₹35L",
+     roles:[["Product Manager","₹14–24L","Entry","6K+","Flipkart · Swiggy · CRED"],["Agile Scrum Master","₹10–18L","Mid","5K+","Infosys · TCS · Capgemini"],["Project Manager","₹9–16L","Senior","5K+","Wipro · HCL · Accenture"],["VP Product Track","₹25–40L+","Lead","2K+","Google · Microsoft · Razorpay"]],
+     certs:[
+      {nm:"Google Project Management Certificate",cost:"Free",rr:"Project Manager · Product Manager",pkg:"₹9–16L",cap:"Sauce & Spoon ordering-system PM lifecycle simulation",how:"6 courses · ~180 hrs · free"},
+      {nm:"NPTEL Agile & Scrum Basics",cost:"₹1,100",rr:"Agile Scrum Master · VP Product Track",pkg:"₹10–18L",cap:"Sprint retrospective + backlog + velocity chart",how:"8-week IIT · proctored exam"}]},
+    {n:"Risk, Compliance & Cyber-GRC",op:"12K+",ctc:"₹32L",
+     roles:[["Risk Analyst","₹8–14L","Entry","4K+","KPMG · Deloitte · PwC"],["Compliance Manager","₹10–18L","Mid","4K+","RBI · SEBI · IRDAI"],["Cyber-GRC Consultant","₹12–20L","Senior","3K+","Infosys · TCS · HCL"],["CISO Track","₹25–40L+","Lead","1K+","HDFC Bank · TCS · Wipro"]],
+     certs:[
+      {nm:"ISC2 Certified in Cybersecurity (CC)",cost:"Free",rr:"Cyber-GRC Consultant · CISO Track",pkg:"₹8–14L",cap:"Cybersecurity risk assessment + incident-response plan",how:"~14 hrs · ISC2 free · pass CC exam"},
+      {nm:"NPTEL Risk Management",cost:"₹1,100",rr:"Risk Analyst · Compliance Manager",pkg:"₹10–18L",cap:"Risk register + mitigation matrix for a compliance scenario",how:"8-week IIT · proctored exam"}]},
+    {n:"Consulting, Strategy & Case Skills",op:"10K+",ctc:"₹40L",
+     roles:[["Management Consultant","₹12–22L","Entry","3K+","McKinsey · BCG · Bain"],["Strategy Analyst","₹10–18L","Mid","4K+","Deloitte · EY · KPMG"],["Business Transformation Lead","₹16–28L","Senior","3K+","Accenture · IBM · Capgemini"],["Partner Track","₹35–50L+","Lead","<1K","MBB · Big 4 · IB firms"]],
+     certs:[
+      {nm:"BCG Strategy Open Course",cost:"Free",rr:"Strategy Analyst · Management Consultant",pkg:"₹12–22L",cap:"BCG-style case: problem → hypothesis → data → recommendation",how:"4 modules + case library · free"},
+      {nm:"NPTEL Strategic Management",cost:"₹1,100",rr:"Business Transformation Lead · Partner Track",pkg:"₹10–18L",cap:"PESTLE + Porter's 5 + SWOT + growth-strategy deck",how:"12-week IIT · proctored exam"},
+      {nm:"Bloomberg Market Concepts (BMC)",cost:"Free",rr:"Strategy Analyst · Management Consultant",pkg:"₹12–22L",cap:"Macro case analysis + market-sizing model on Bloomberg",how:"~8 hrs · KL Terminal · BMC badge"}]}
+  ];
+
+  var BBA = [
+    {n:"Analytics & BI",op:"20K+",ctc:"₹12L",
+     roles:[["Junior Data Analyst","₹3–5L","Entry","8K+","TCS · Wipro · Infosys"],["BI Analyst Trainee","₹4–7L","Mid","5K+","Cognizant · HCL · Capgemini"],["Analytics Associate","₹5–9L","Senior","4K+","Amazon · Flipkart · Swiggy"],["Analytics Manager","₹9–14L","Lead","3K+","Deloitte · KPMG · Accenture"]],
+     certs:[
+      {nm:"Google Data Analytics Certificate",cost:"Free",rr:"Junior Data Analyst · BI Analyst Trainee",pkg:"₹4–7L",cap:"Cyclistic analysis on Google Sheets",how:"6 courses · ~40 hrs · free"},
+      {nm:"NPTEL Data Analysis",cost:"₹1,100",rr:"Analytics Associate · Analytics Manager",pkg:"₹5–9L",cap:"Sales data analysis + visualisation (Excel/Python)",how:"8-week IIT · proctored exam"},
+      {nm:"Bloomberg Finance Fundamentals",cost:"Free",rr:"Analytics Associate · BI Analyst Trainee",pkg:"₹5–9L",cap:"Financial data analysis + Excel dashboard on Bloomberg",how:"~6 hrs · KL Terminal · 3 modules"}]},
+    {n:"Digital Marketing",op:"28K+",ctc:"₹14L",
+     roles:[["Social Media Executive","₹3–5L","Entry","10K+","Dentsu · Publicis · WPP"],["SEO Analyst","₹3–6L","Mid","7K+","iProspect · Performics · Webchutney"],["Digital Marketing Exec","₹4–8L","Senior","8K+","Zomato · Nykaa · Meesho"],["Marketing Manager","₹8–14L","Lead","3K+","HUL · P&G · Marico"]],
+     certs:[
+      {nm:"Google Digital Marketing Fundamentals",cost:"Free",rr:"Digital Marketing Exec · SEO Analyst",pkg:"₹4–8L",cap:"Google Ads Search campaign + keyword plan",how:"Skillshop · ~10 hrs · free"},
+      {nm:"Meta Blueprint Basics",cost:"Free",rr:"Social Media Executive · Marketing Manager",pkg:"₹4–8L",cap:"Facebook Ads structure + creative brief",how:"3 courses · ~6 hrs · free badge"}]},
+    {n:"Sales & CRM",op:"38K+",ctc:"₹14L",
+     roles:[["Sales Executive","₹3–5L","Entry","15K+","HDFC Life · Bajaj Allianz · Policybazaar"],["CRM Coordinator","₹3–6L","Mid","8K+","Zoho · Freshworks · Salesforce"],["Inside Sales Rep","₹4–7L","Senior","10K+","Meesho · Lenskart · UrbanClap"],["Sales Manager","₹8–14L","Lead","5K+","ICICI · Axis · SBI"]],
+     certs:[
+      {nm:"HubSpot Sales Software Certificate",cost:"Free",rr:"Sales Executive · Inside Sales Rep",pkg:"₹4–7L",cap:"Sales pipeline + email sequence in HubSpot CRM",how:"5 lessons · ~2 hrs · free exam"},
+      {nm:"Salesforce Trailhead CRM Basics",cost:"Free",rr:"CRM Coordinator · Sales Manager",pkg:"₹4–7L",cap:"Salesforce org setup + reports & dashboards",how:"Salesforce Basics trail · Ranger badge"}]},
+    {n:"Finance",op:"20K+",ctc:"₹14L",
+     roles:[["Accounts Executive","₹3–5L","Entry","8K+","Deloitte · EY · PwC"],["Finance Analyst Trainee","₹4–7L","Mid","5K+","KPMG · Grant Thornton · BDO"],["Banking Associate","₹4–8L","Senior","4K+","HDFC · ICICI · Kotak"],["Finance Manager","₹9–14L","Lead","3K+","Bajaj Finance · Reliance · Tata Capital"]],
+     certs:[
+      {nm:"NPTEL Financial Accounting",cost:"₹1,100",rr:"Accounts Executive · Finance Analyst Trainee",pkg:"₹4–7L",cap:"Journal entries + trial balance + final accounts",how:"8-week IIT · proctored exam"},
+      {nm:"Wall Street Mojo Finance Basics",cost:"Free",rr:"Banking Associate · Finance Manager",pkg:"₹4–8L",cap:"Personal finance model + stock analysis report",how:"4 modules · ~6 hrs · free"},
+      {nm:"Bloomberg Market Concepts (BMC)",cost:"Free",rr:"Finance Analyst Trainee · Banking Associate",pkg:"₹4–8L",cap:"Terminal walkthrough: macro + currencies + fixed income + equities",how:"~8 hrs · KL Terminal · BMC badge"}]},
+    {n:"AI & Productivity",op:"16K+",ctc:"₹14L",
+     roles:[["AI Tools Specialist","₹4–7L","Entry","6K+","TCS · Infosys · HCL"],["Automation Analyst Trainee","₹4–8L","Mid","5K+","UiPath · Automation Anywhere · Blue Prism"],["AI Product Tester","₹5–9L","Senior","3K+","Wipro · Capgemini · LTIMindtree"],["AI Ops Lead","₹10–16L","Lead","2K+","Microsoft · IBM · Google"]],
+     certs:[
+      {nm:"IBM AI Foundations (Coursera)",cost:"Free",rr:"AI Tools Specialist · AI Product Tester",pkg:"₹5–9L",cap:"AI use-case map + no-code automation concept",how:"5 IBM badges · ~30 hrs · free"},
+      {nm:"Microsoft AI-900 Fundamentals",cost:"₹1,500",rr:"Automation Analyst Trainee · AI Ops Lead",pkg:"₹5–9L",cap:"Azure AI cognitive-services demo + reflection report",how:"Microsoft Learn · ~10 hrs · AI-900 exam"}]},
+    {n:"Project & Product",op:"14K+",ctc:"₹16L",
+     roles:[["Junior Project Analyst","₹3–5L","Entry","5K+","Wipro · HCL · Infosys"],["Product Associate","₹4–8L","Mid","3K+","Swiggy · CRED · Razorpay"],["Scrum Team Member","₹4–7L","Senior","4K+","Capgemini · TCS · Accenture"],["Product Manager","₹10–16L","Lead","2K+","Flipkart · Zomato · Meesho"]],
+     certs:[
+      {nm:"Google Project Management Certificate",cost:"Free",rr:"Junior Project Analyst · Product Associate",pkg:"₹4–8L",cap:"Sauce & Spoon PM simulation (condensed)",how:"6 courses · ~180 hrs · free"},
+      {nm:"NPTEL Project Management",cost:"₹1,100",rr:"Scrum Team Member · Product Manager",pkg:"₹5–8L",cap:"WBS + Gantt chart + execution plan",how:"8-week IIT · proctored exam"}]},
+    {n:"Operations",op:"18K+",ctc:"₹14L",
+     roles:[["Operations Executive","₹3–5L","Entry","7K+","Amazon · Flipkart · Delhivery"],["Supply Chain Associate","₹3–6L","Mid","5K+","Maersk · DHL · Blue Dart"],["Logistics Analyst","₹4–7L","Senior","4K+","Gati · Ecom Express · XpressBees"],["Operations Manager","₹9–14L","Lead","2K+","Tata · L&T · Mahindra"]],
+     certs:[
+      {nm:"NPTEL Operations Management",cost:"₹1,100",rr:"Operations Executive · Logistics Analyst",pkg:"₹4–7L",cap:"Process-flow map + bottleneck analysis + improvement plan",how:"8-week IIT · proctored exam"},
+      {nm:"Six Sigma White Belt (Free Online)",cost:"Free",rr:"Supply Chain Associate · Operations Manager",pkg:"₹5–8L",cap:"DMAIC mini-project: define + measure + recommend",how:"~6 hrs · free White Belt cert"}]},
+    {n:"Consulting Prep",op:"10K+",ctc:"₹16L",
+     roles:[["Junior Analyst (MBB Aspirant)","₹4–7L","Entry","2K+","McKinsey · BCG · Bain"],["Business Analyst Trainee","₹4–8L","Mid","3K+","Deloitte · EY · KPMG"],["Strategy Associate","₹6–10L","Senior","2K+","Accenture · IBM · Capgemini"],["Consultant","₹10–16L","Lead","3K+","Big 4 · MBB · Boutique firms"]],
+     certs:[
+      {nm:"BCG Online Consulting Basics",cost:"Free",rr:"Business Analyst Trainee · Strategy Associate",pkg:"₹6–10L",cap:"Mini case solution + McKinsey-style 3-act slides",how:"4 modules + case library · free"},
+      {nm:"NPTEL Business Strategy",cost:"₹1,100",rr:"Junior Analyst · Consultant",pkg:"₹5–9L",cap:"Industry strategy deck: Porter's Five + growth options",how:"8-week IIT · proctored exam"}]}
+  ];
+
+  var MBAC = [
+    {t:"Business Analytics / BI Consultant",e:"MBA BA, Finance, Marketing",ctc:"₹20–32L",stack:["PL-300","Google BI","Alteryx Core","GA4"],pf:"4 dashboards, SQL queries, business-insight memo, stakeholder presentation",emp:"Big 4, analytics consulting, SaaS analytics teams, GCCs",logic:"30+ LPA usually needs a strong portfolio + live project + interview case performance, not the certificate alone",day:"Wk 1–4 Power BI · Wk 5–8 SQL/BI projects · Wk 9–12 portfolio + case interviews"},
+    {t:"Salesforce BA / CRM Consultant",e:"MBA Marketing, BA, Operations",ctc:"₹18–28L",stack:["Salesforce Associate","Salesforce BA","HubSpot RevOps","Jira"],pf:"Salesforce process map, BRD, user stories, reports, demo org",emp:"Salesforce partners, SaaS firms, IT services, consulting",logic:"CRM consulting scales fast because domain + process + tool skills combine",day:"Wk 1–2 Trailhead · Wk 3–7 Salesforce projects · Wk 8–12 BA case portfolio"},
+    {t:"AI Transformation / Digital Strategy Analyst",e:"All MBA specializations",ctc:"₹22–35L",stack:["MS AI Business Professional","AI Transformation Leader","Google GenAI Leader","BCG GenAI sim"],pf:"AI use-case portfolio, ROI model, governance/risk checklist, board-style deck",emp:"Consulting, enterprise digital offices, SaaS, AI startups",logic:"Higher CTC comes from converting AI hype into measurable business cases",day:"Complete 3 AI strategy cases across HR, marketing and operations"},
+    {t:"Performance Marketing / Growth Analyst",e:"MBA Marketing, BA",ctc:"₹18–30L",stack:["Google Ads Search","Measurement","GA4","Meta DMA","Semrush SEO","HubSpot Content"],pf:"Campaign plan, GA4 dashboard, SEO audit, paid-media ROI model",emp:"D2C brands, agencies, SaaS growth teams, marketplaces",logic:"30 LPA is possible when the candidate proves acquisition economics + analytics, not only campaign setup",day:"Build one end-to-end growth case for a real product"},
+    {t:"Product Analyst / Associate PM",e:"MBA BA, Marketing, Operations",ctc:"₹20–30L",stack:["PSPO I","Amplitude Academy","Google BI","Jira","Pendo"],pf:"PRD, backlog, funnel/cohort analysis, product teardown, prioritization matrix",emp:"SaaS, fintech, edtech, product startups, GCC product teams",logic:"Product roles pay more when business judgment + analytics + customer understanding are visible",day:"Build 2 product teardowns and 1 analytics case study"},
+    {t:"Operations Excellence / Process Improvement",e:"MBA Operations, BA",ctc:"₹14–22L",stack:["CSSC Green Belt","Power Platform","SAP Learning","Power BI"],pf:"DMAIC project, process map, automation workflow, cost-saving model",emp:"Manufacturing, logistics, consulting, shared services, GCCs",logic:"Operations pay improves when candidates quantify savings and automate processes",day:"Do one DMAIC project and one automation project"},
+    {t:"Cyber-GRC / IT Risk Analyst",e:"MBA Finance, BA, Operations",ctc:"₹15–25L",stack:["ISC2 CC","ISACA Cybersecurity Fundamentals","Google Cybersecurity","Power BI"],pf:"Risk register, controls matrix, incident-response report, compliance dashboard",emp:"Big 4 risk advisory, IT audit, banking risk, cyber consulting",logic:"Non-coding cyber-GRC roles suit MBA grads who prove controls and risk thinking",day:"Build a GRC portfolio with 3 artifacts; study security basics daily"},
+    {t:"People Analytics / HR Tech Analyst",e:"MBA HR, BA",ctc:"₹12–22L",stack:["UCI HR Analytics","Power BI","SAP SuccessFactors","AI Business Professional"],pf:"Attrition dashboard, HR KPI framework, HRIS process map, AI HR use-case policy",emp:"HR analytics teams, HR tech, consulting, shared services",logic:"30 LPA is harder for pure-HR freshers; HR tech / people analytics lifts the ceiling",day:"Build an attrition dashboard and a workforce-planning case"},
+    {t:"FP&A / Finance Analytics Analyst",e:"MBA Finance, BA",ctc:"₹16–28L",stack:["PL-300","CFI Corporate Finance","Bloomberg BMC","QuickBooks","Excel"],pf:"3-statement model, budget-vs-actual dashboard, valuation summary, market brief",emp:"GCC finance, FP&A teams, fintech, consulting, research firms",logic:"Finance CTC rises with modeling depth, analytics tools and sector understanding",day:"Build a finance model + a Power BI finance dashboard"}
+  ];
+
+  var BBAC = [
+    {t:"Junior Business Analyst",e:"BBA Analytics / Finance / Marketing",ctc:"₹8–12L",stack:["Google Data Analytics","PL-300","SQL","Excel"],pf:"3 dashboards, SQL portfolio, business-insight memo",emp:"Big 4 audit teams, GCCs, IT services, SaaS analytics",logic:"Fresher BA roles start 4–8 LPA; certification + portfolio can push toward 8–12 LPA",day:"Wk 1–6 Power BI · Wk 7–10 SQL · Wk 11–12 portfolio + interviews"},
+    {t:"Digital Marketing Associate",e:"BBA Marketing",ctc:"₹6–10L",stack:["Google Digital Marketing","HubSpot","Google Ads","GA4"],pf:"Campaign plan, SEO audit, GA4 dashboard",emp:"D2C brands, agencies, SaaS, marketplaces",logic:"Fresher roles 4–7 LPA, with growth potential to 12–15 LPA in 2 years",day:"Build 1 end-to-end campaign + measurement case"},
+    {t:"CRM Coordinator / Salesforce Trainee",e:"BBA Marketing / Operations",ctc:"₹7–12L",stack:["Salesforce AI Associate","HubSpot Sales","Trailhead badges"],pf:"Demo org, pipeline, process map",emp:"Salesforce partners, SaaS, IT services, agencies",logic:"Salesforce-certified freshers see 6–12 LPA depending on portfolio",day:"Earn 5 Trailhead Superbadges + 1 demo build"},
+    {t:"Finance Analyst Trainee",e:"BBA Finance",ctc:"₹6–10L",stack:["CFI free","Bloomberg BMC","Excel modeling"],pf:"3-statement model, market brief, valuation case",emp:"GCCs, FP&A teams, research firms, fintech",logic:"Finance fresher roles 5–10 LPA; modeling skill raises the ceiling",day:"Build 1 valuation model + 1 sector brief"},
+    {t:"AI-Augmented Business Associate",e:"All BBA tracks",ctc:"₹8–15L",stack:["Google AI Essentials","AI-900","domain certs"],pf:"AI use-case portfolio + automation prototype",emp:"Consulting, SaaS, startups, GCCs",logic:"AI-fluent freshers stand out and can land 8–15 LPA roles",day:"Build 2 AI-augmented business cases"},
+    {t:"Junior Project Coordinator",e:"BBA Operations / Marketing",ctc:"₹6–9L",stack:["Google PM Certificate","Jira","Forage"],pf:"PM portfolio with 2 simulated projects",emp:"IT services, agencies, SaaS, consulting",logic:"Entry-level PM coordinator roles start 5–9 LPA",day:"Run 1 simulated project end-to-end"},
+    {t:"Consulting Analyst (Entry)",e:"All BBA tracks",ctc:"₹8–14L",stack:["BCG Forage","Deloitte Forage","Accenture Forage","case prep"],pf:"3 case decks, market-sizing examples",emp:"Tier-2 consulting, Big 4 advisory, boutique firms",logic:"Consulting fresher roles 7–12 LPA; case skills push higher",day:"Solve 10 cases + prep 3 consulting decks"}
+  ];
+
+  // ---------- RENDER ----------
+  function trackHTML(t){
+    var roles = t.roles.map(function(r){
+      return '<tr><td class="rn">'+esc(r[0])+'<small>'+esc(r[4])+'</small></td><td class="rp">'+esc(r[1])+'</td><td class="rl">'+esc(r[2])+' · '+esc(r[3])+'</td></tr>';
+    }).join('');
+    var certs = t.certs.map(function(c){
+      var cls = free(c.cost) ? 'free':'paid';
+      return '<div class="cert"><div class="top"><span class="nm">'+esc(c.nm)+'</span><span class="cost '+cls+'">'+esc(c.cost)+'</span></div>'+
+             '<div class="rr">Roles: <b>'+esc(c.rr)+'</b> · est. '+esc(c.pkg)+'</div>'+
+             '<div class="cap">Capstone: '+esc(c.cap)+'</div>'+
+             '<div class="how">'+esc(c.how)+'</div></div>';
+    }).join('');
+    return '<div class="track"><div class="th"><div><h3>'+esc(t.n)+'</h3>'+
+      '<div class="meta">4 roles · '+esc(t.op)+' annual openings (India)</div></div>'+
+      '<div class="ctc"><b>'+esc(t.ctc)+'</b><span>Top CTC</span></div></div>'+
+      '<div class="roles"><table>'+roles+'</table></div>'+
+      '<div class="certs"><div class="ch">Optional certifications · pick any 1 · not mandatory</div>'+certs+'</div></div>';
+  }
+  function careerHTML(c,i){
+    var chips = c.stack.map(function(s){return '<span class="chip">'+esc(s)+'</span>';}).join('');
+    return '<div class="cr"><div class="rank">'+(i+1)+'</div>'+
+      '<h3>'+esc(c.t)+'</h3><div class="elig">'+esc(c.e)+'</div>'+
+      '<div class="ctc">'+esc(c.ctc)+'</div>'+
+      '<div class="lab">Certification stack</div><div class="stack">'+chips+'</div>'+
+      '<div class="lab">Portfolio proof</div><p>'+esc(c.pf)+'</p>'+
+      '<div class="lab">Employers</div><p>'+esc(c.emp)+'</p>'+
+      '<p class="logic">'+esc(c.logic)+'</p>'+
+      '<p class="day">90-day plan · '+esc(c.day)+'</p></div>';
+  }
+
+  document.getElementById('mbaGrid').innerHTML = MBA.map(trackHTML).join('');
+  document.getElementById('bbaGrid').innerHTML = BBA.map(trackHTML).join('');
+  document.getElementById('mbaCareerGrid').innerHTML = MBAC.map(careerHTML).join('');
+  document.getElementById('bbaCareerGrid').innerHTML = BBAC.map(careerHTML).join('');
+
+  // ---------- TABS ----------
+  var specTabs = document.getElementById('specTabs');
+  specTabs.addEventListener('click', function(e){
+    var b = e.target.closest('button'); if(!b) return;
+    specTabs.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});
+    b.classList.add('on');
+    var t = b.getAttribute('data-tab');
+    document.getElementById('mbaTracks').style.display = (t==='mba')?'block':'none';
+    document.getElementById('bbaTracks').style.display = (t==='bba')?'block':'none';
+  });
+  var careerTabs = document.getElementById('careerTabs');
+  careerTabs.addEventListener('click', function(e){
+    var b = e.target.closest('button'); if(!b) return;
+    careerTabs.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});
+    b.classList.add('on');
+    var t = b.getAttribute('data-ctab');
+    document.getElementById('mbaCareers').style.display = (t==='mbac')?'block':'none';
+    document.getElementById('bbaCareers').style.display = (t==='bbac')?'block':'none';
+  });
+  // BBA anchor: switch spec tab to BBA when #bba clicked
+  document.querySelectorAll('a[href="#bba"]').forEach(function(a){
+    a.addEventListener('click',function(){
+      specTabs.querySelector('[data-tab="bba"]').click();
+    });
+  });
+})();
+</script>
+</body>
+</html>
